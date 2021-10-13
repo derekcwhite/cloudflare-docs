@@ -36,17 +36,18 @@ F5:E1:56:C4:89:78:77:AD:79:3A:1E:83:FA:77:83:F1:9C:B0:C6:1B:58:2C:2F:50:11:B3:37
 
 ## Add the certificate to your system
 
-### MacOS
+### macOS
 
-You will need to install the root certificate in the **Keychain Access** application. In the application, you can choose the keychain in which you want to install the certificate. macOS offers three options, each having a different impact on which users will be affected by trusting the root certificate.
+macOS has a Trust Store containing trusted, pre-installed root certificates. You can interact with the Trust Store via **Keychain Access.app** or via the the **security** command-line utility. The macOS Trust Store has two keychains in which the Cloudflare root certificate can be installed, depending on which users should trust the certificate:
 
 | Keychain   | Impact                  |
 |-------------|-------------------------|
 | login       | The logged in user      |
-| Local Items | Cached iCloud passwords |
 | System      | All users on the system |
 
-Installing the certificate in the Login keychain will result in only the logged in user trusting the Cloudflare certificate. Installing it in the System keychain affects all users who have access to that machine.
+When installing the Cloudflare root certificate, choose the keychain which has the desired impact level. To have all users trust the Cloudflare root certificate, choose **System**. If the certificate should only be trusted by the logged in user, choose **login**
+
+#### Via Keychain Access.app
 
 To install the certificate in **Keychain Access**:
 
@@ -54,7 +55,7 @@ To install the certificate in **Keychain Access**:
 
 2. Double-click on the `.crt` file.
 
-3. In the pop-up message, choose the option that suits your needs (*login*, *Local Items*, or *System*) and click **Add**.
+3. In the pop-up message, choose the option that suits your needs (*login* or *System*) and click **Add**.
 
  ![Popup](../../../static/documentation/connections/keychain-popup.png)
 
@@ -76,7 +77,7 @@ To install the certificate in **Keychain Access**:
 
 The root certificate is now installed and ready to be used.
 
-#### Base Operating System
+#### Via the command line
 
 You can install the Cloudflare certificate on your terminal, too.
 
@@ -86,12 +87,6 @@ You can install the Cloudflare certificate on your terminal, too.
 
  ```bash
  sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain <Cloudflare_CA.crt>
- ```
-
-1. Update the OpenSSL CA Store to include the Cloudflare certificate:
-
- ```bash
-sudo cat Cloudflare_CA.crt >> /usr/local/etc/openssl/cert.pem
  ```
 
 ### iOS
